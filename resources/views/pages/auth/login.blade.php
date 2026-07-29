@@ -1,50 +1,78 @@
 <x-layouts::auth :title="__('Log in')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
+
+        @env('local')
+            <x-login-link />
+        @endenv
+
+        <x-auth-header
+            :description="__('Enter your email and password below to log in')"
+            :title="__('Log in to your account')"
+        />
 
         <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+        <x-auth-session-status
+            :status="session('status')"
+            class="text-center"
+        />
 
 
-        <form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-6">
+        <form
+            action="{{ route('login.store') }}"
+            class="flex flex-col gap-6"
+            method="POST"
+        >
             @csrf
 
             <!-- Email Address -->
             <flux:input
-                name="email"
                 :label="__('Email address')"
                 :value="old('email')"
-                type="email"
-                required
-                autofocus
                 autocomplete="email"
+                autofocus
+                name="email"
                 placeholder="email@example.com"
+                required
+                type="email"
             />
 
             <!-- Password -->
             <div class="relative">
                 <flux:input
-                    name="password"
                     :label="__('Password')"
-                    type="password"
-                    required
-                    autocomplete="current-password"
                     :placeholder="__('Password')"
+                    autocomplete="current-password"
+                    name="password"
+                    required
+                    type="password"
                     viewable
                 />
 
                 @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
+                    <flux:link
+                        :href="route('password.request')"
+                        class="absolute end-0 top-0 text-sm"
+                        wire:navigate
+                    >
                         {{ __('Forgot your password?') }}
                     </flux:link>
                 @endif
             </div>
 
             <!-- Remember Me -->
-            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" />
+            <flux:checkbox
+                :checked="old('remember')"
+                :label="__('Remember me')"
+                name="remember"
+            />
 
             <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
+                <flux:button
+                    class="w-full"
+                    data-test="login-button"
+                    type="submit"
+                    variant="primary"
+                >
                     {{ __('Log in') }}
                 </flux:button>
             </div>
